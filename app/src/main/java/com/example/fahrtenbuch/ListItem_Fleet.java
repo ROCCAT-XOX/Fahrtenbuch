@@ -1,22 +1,22 @@
 package com.example.fahrtenbuch;
 
-public class ListItem {
+public class ListItem_Fleet {
 
-    private Integer id ;
+    private Integer car_id;
     private String marke = "";
     private String modell = "";
     private Float kilometerstand;
 
-    public ListItem(Integer id, String marke, String modell, Float kilometerstand) {
+    public ListItem_Fleet(Integer car_id, String marke, String modell, Float kilometerstand) {
 
-        this.id = id;
+        this.car_id = car_id;
         this.marke = marke;
         this.modell = modell;
         this.kilometerstand = kilometerstand;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getCar_id() {
+        return car_id;
     }
     public String getMarke() {
         return marke;
