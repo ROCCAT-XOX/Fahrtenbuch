@@ -31,7 +31,7 @@ public class Fleet extends AppCompatActivity {
         lv = (ListView) findViewById(R.id.list_fleet);
 
         try {
-            doGetRequest("http://10.0.2.2:5000/fahrzeug");
+            doGetRequest("http://10.0.2.2:5000/car");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,18 +63,20 @@ public class Fleet extends AppCompatActivity {
                         public void run() {
                             try {
                                 JSONObject jobject = new JSONObject(myResponse);
-                                JSONArray jsonArray = jobject.getJSONArray("fahrzeuge");
+                                JSONArray jsonArray = jobject.getJSONArray("cars");
 
                                 for (int i=0; i < jsonArray.length(); i++)
                                 {
                                     try {
                                         JSONObject oneObject = jsonArray.getJSONObject(i);
                                         String marke = oneObject.getString("marke");
-                                        String modell = oneObject.getString("modell");
-                                        Integer id = oneObject.getInt("fahrzeug_id");
+                                        String modell = oneObject.getString("model");
+                                        Integer id = oneObject.getInt("id");
                                         Double kilometerstand = oneObject.getDouble("kilometerstand");
+                                        Integer ps = oneObject.getInt("ps");
+                                        Boolean verfügbar = oneObject.getBoolean("verfügbar");
 
-                                        car_list.add(new ListItem_Fleet(id,marke, modell, kilometerstand.floatValue()));
+                                        car_list.add(new ListItem_Fleet(id,marke, modell, kilometerstand.floatValue(),ps,verfügbar));
                                         Log.d("Fahrtenbuch", car_list.get(i).getModell());
                                         Log.d("Fahrtenbuch", car_list.get(i).getModell());
                                     } catch (JSONException e) {

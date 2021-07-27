@@ -6,13 +6,17 @@ public class ListItem_Fleet {
     private String marke = "";
     private String modell = "";
     private Float kilometerstand;
+    private Boolean verfügbar;
+    private Integer ps;
 
-    public ListItem_Fleet(Integer car_id, String marke, String modell, Float kilometerstand) {
+    public ListItem_Fleet(Integer car_id, String marke, String modell, Float kilometerstand, Integer ps,Boolean verfügbar) {
 
         this.car_id = car_id;
         this.marke = marke;
         this.modell = modell;
         this.kilometerstand = kilometerstand;
+        this.ps = ps;
+        this.verfügbar = verfügbar;
     }
 
     public Integer getCar_id() {
@@ -27,5 +31,7 @@ public class ListItem_Fleet {
     public Float getKilometerstand() {
         return kilometerstand;
     }
+    public Integer getPs(){return ps;}
+    public Boolean getVerfügbar() {return verfügbar;}
 
 }

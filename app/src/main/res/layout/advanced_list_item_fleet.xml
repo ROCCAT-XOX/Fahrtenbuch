@@ -7,42 +7,65 @@
 
     <TextView
         android:id="@+id/tv_list_id"
-        android:layout_width="80dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="4dp"
-        android:text="TextView"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:text="ID"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_list_marke"
-        android:layout_width="73dp"
-        android:layout_height="48dp"
-        android:text="TextView"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:text="Marke"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_list_id"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_list_modell"
-        android:layout_width="72dp"
-        android:layout_height="48dp"
-        android:text="TextView"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:text="Modell"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_list_marke"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_list_kilometerstand"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:text="Kilometer"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_list_modell"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/tv_list_kilometerstand"
-        android:layout_width="156dp"
-        android:layout_height="49dp"
-        android:text="TextView"
+        android:id="@+id/tv_list_verfügbar"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:text="Verfügbar"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_list_modell"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_list_ps"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tv_list_ps"
+        android:layout_width="30dp"
+        android:layout_height="50dp"
+        android:text="PS"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_list_kilometerstand"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 

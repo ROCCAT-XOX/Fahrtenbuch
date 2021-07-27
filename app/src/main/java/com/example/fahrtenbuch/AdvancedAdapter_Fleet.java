@@ -26,16 +26,25 @@ public class AdvancedAdapter_Fleet extends ArrayAdapter<ListItem_Fleet> {
 
 
         TextView tv_list_id = element.findViewById(R.id.tv_list_id);
-        tv_list_id.setText("ID: " +getItem(position).getCar_id().toString());
+        tv_list_id.setText("ID:" +"\n" +getItem(position).getCar_id().toString());
 
         TextView tv_list_marke = element.findViewById(R.id.tv_list_marke);
-        tv_list_marke.setText("Marke: " +getItem(position).getMarke());
+        tv_list_marke.setText("Marke:" + "\n" +getItem(position).getMarke());
 
         TextView tv_list_modell = element.findViewById(R.id.tv_list_modell);
-        tv_list_modell.setText("Modell: " +getItem(position).getModell());
+        tv_list_modell.setText("Modell:" + "\n" +getItem(position).getModell());
 
         TextView tv_list_kilometerstand = element.findViewById(R.id.tv_list_kilometerstand);
-        tv_list_kilometerstand.setText("Kilometerstand: " +getItem(position).getKilometerstand().toString());
+        tv_list_kilometerstand.setText("Kilometerstand:" + "\n" +getItem(position).getKilometerstand().toString());
+
+        TextView tv_list_ps = element.findViewById(R.id.tv_list_ps);
+        tv_list_ps.setText("PS:" + "\n" + getItem(position).getPs());
+
+        TextView tv_list_verfügbar = element.findViewById(R.id.tv_list_verfügbar);
+        tv_list_verfügbar.setText("Verfügbar:" + "\n" + getItem(position).getVerfügbar());
+
+
+
 
         return element;
 
