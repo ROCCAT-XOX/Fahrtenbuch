@@ -50,6 +50,8 @@ public class Login extends AppCompatActivity {
         });
     }
 
+
+    //Der http Request benötigt für die BasicAuth einen Header mit den Credentials, der hier erstellt wird
     private OkHttpClient createAuthenticatedClient(final String username,
                                                    final String password) {
         // build client with authentication information.
@@ -59,19 +61,29 @@ public class Login extends AppCompatActivity {
                 return response.request().newBuilder().header("Authorization", credential).build();
             }
         }).build();
-        Log.d("My_Application", "header");
+
         return httpClient;
     }
 
+
+    //hier findet der eigentliche http request statt, dabei wird der httpClient übergeben, der schon mit dem header erstellt worden ist sowie die url
     private void doRequest(OkHttpClient httpClient, String anyURL) throws Exception {
 
         Request request = new Request.Builder()
                 .url(anyURL)
                 .build();
 
+        //es wird bewusst enqueue verwendet, um einen neuen thread zu starten
         httpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                Login.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Toast message, wenn credentials falsch sind
+                        Toast.makeText(Login.this, "Login failed!", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 e.printStackTrace();
             }
 
@@ -83,13 +95,16 @@ public class Login extends AppCompatActivity {
                     Login.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(Login.this, "This is my Toast message!", Toast.LENGTH_SHORT).show();
+                            //Toast message für erfolgreichen Login
+                            Toast.makeText(Login.this, "Login successfull!", Toast.LENGTH_SHORT).show();
+                            //Kurz warten mit dem switchen der Activity, um Toast Message vollständig zu zeigen
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 public void run() {
+                                    //Activity wechseln
                                     switchActivity();
                                 }
-                            }, 1500);
+                            }, 1200);
                         }
                     });
                 }
@@ -97,6 +112,8 @@ public class Login extends AppCompatActivity {
         });
     }
 
+
+    //die fetch methode dient zur übersicht: sie ruft die Methode zur erstellung des http clients mit header auf, sowie die methode, die den request ausführt
     public void fetch(String url, String username, String password) throws Exception {
 
         OkHttpClient httpClient = createAuthenticatedClient(username, password);
