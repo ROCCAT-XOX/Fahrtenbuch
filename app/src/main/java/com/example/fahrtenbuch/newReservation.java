@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -49,7 +50,7 @@ public class newReservation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_reservation);
 
-        car_spinner =findViewById(R.id.spinner);
+        car_spinner = findViewById(R.id.spinner);
 
         cars.add(0, "Wähle ein Auto");
 
@@ -79,7 +80,7 @@ public class newReservation extends AppCompatActivity {
         });
 
         try {
-            getAvailableCars("http://10.0.2.2:5000/car");
+            getAvailableCars("http://10.0.2.2:5000/verfügbarCar");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -110,7 +111,7 @@ public class newReservation extends AppCompatActivity {
                         public void run() {
                             try {
                                 JSONObject jobject = new JSONObject(myResponse);
-                                JSONArray jsonArray = jobject.getJSONArray("cars");
+                                JSONArray jsonArray = jobject.getJSONArray("Free Cars");
 
                                 for (int i=0; i < jsonArray.length(); i++)
                                 {
@@ -122,6 +123,7 @@ public class newReservation extends AppCompatActivity {
 
 
                                         cars.add("ID:" + id.toString() + " " + "Marke: " + marke + " " + "Modell: " + modell );
+                                        Log.d("Fahrtenbuch", cars.toString());
                                         cars_id.add(id);
 
                                     } catch (JSONException e) {
