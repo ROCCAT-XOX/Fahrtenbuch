@@ -2,12 +2,15 @@ package com.example.fahrtenbuch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +33,7 @@ public class newReservation extends AppCompatActivity {
     private Spinner car_spinner;
     List<String> cars = new ArrayList<String>();
     List<Integer> cars_id = new ArrayList<Integer>();
+    int car_id;
     private String eingeloggterUser;
 
     final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -47,6 +51,7 @@ public class newReservation extends AppCompatActivity {
 
         car_spinner =findViewById(R.id.spinner);
 
+
         et_start = findViewById(R.id.et_start);
         et_ziel = findViewById(R.id.et_ziel);
         et_strecke = findViewById(R.id.et_strecke);
@@ -59,9 +64,11 @@ public class newReservation extends AppCompatActivity {
 
                 if(getIntent().hasExtra("public_id") == true) {
                     eingeloggterUser = getIntent().getExtras().getString("public_id");
+                    car_id = car_spinner.getSelectedItemPosition();
+
                 }
 
-                String json = "{\"fahrzeug_id\": 77,\"public_id\":" + "\"" + eingeloggterUser + "\"" + ",\"start\":" + "\"" + et_start.getText().toString()+ "\"" + ",\"ende\":" + "\"" +et_ziel.getText().toString()+ "\"" + ",\"meter\":" + "\"" + et_strecke.getText().toString() + "\"" + "}";
+                String json = "{\"fahrzeug_id\":" + "\"" + cars_id.get(car_id) + "\"" + ",\"public_id\":" + "\"" + eingeloggterUser + "\"" + ",\"start\":" + "\"" + et_start.getText().toString()+ "\"" + ",\"ende\":" + "\"" +et_ziel.getText().toString()+ "\"" + ",\"meter\":" + "\"" + et_strecke.getText().toString() + "\"" + "}";
                 try {
                     addNewReservation("http://10.0.2.2:5000/reservierung", json);
                 } catch (IOException e) {
@@ -156,11 +163,27 @@ public class newReservation extends AppCompatActivity {
                     newReservation.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            //Toast message für erfolgreichen Login
+                            Toast.makeText(newReservation.this, "Reservation successfull!", Toast.LENGTH_SHORT).show();
+                            //Kurz warten mit dem switchen der Activity, um Toast Message vollständig zu zeigen
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    //Activity wechseln
+                                    switchActivity();
+                                }
+                            }, 1200);
                         }
                     });
                 }
             }
         });
 
+    }
+
+    private void switchActivity(){
+        Intent switchActivityIntent = new Intent(this, Welcome.class);
+        switchActivityIntent.putExtra("public_id", eingeloggterUser);
+        startActivity(switchActivityIntent);
     }
 }

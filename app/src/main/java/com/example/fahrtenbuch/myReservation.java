@@ -41,7 +41,7 @@ public class myReservation extends AppCompatActivity {
         Log.d("Fahrtenbuch", eingeloggterUser);
 
         try {
-            doGetRequest("http://10.0.2.2:5000/reservierung");/* + eingeloggterUser);*/
+            doGetRequest("http://10.0.2.2:5000/reservierung/" + eingeloggterUser);
         } catch (IOException e) {
             e.printStackTrace();
         }
