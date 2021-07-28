@@ -66,7 +66,12 @@ public class Welcome extends AppCompatActivity {
             startActivity(switchActivityIntent);
         }
         private void switchToNewReservation(){
+            String eingeloggterUser ="";
             Intent switchActivityIntent = new Intent(this, newReservation.class);
+            if(getIntent().hasExtra("public_id") == true) {
+                eingeloggterUser = getIntent().getExtras().getString("public_id");
+            }
+            switchActivityIntent.putExtra("public_id", eingeloggterUser);
             startActivity(switchActivityIntent);
         }
         private void switchToNewDrive(){

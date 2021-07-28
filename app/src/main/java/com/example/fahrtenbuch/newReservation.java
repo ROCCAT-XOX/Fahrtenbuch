@@ -3,7 +3,10 @@ package com.example.fahrtenbuch;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import org.json.JSONArray;
@@ -16,14 +19,26 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class newReservation extends AppCompatActivity {
 
     private Spinner car_spinner;
     List<String> cars = new ArrayList<String>();
+    List<Integer> cars_id = new ArrayList<Integer>();
+    private String eingeloggterUser;
+
+    final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+    EditText et_start;
+    EditText et_ziel;
+    EditText et_strecke;
+
+    Button btnAddReservation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,22 +46,46 @@ public class newReservation extends AppCompatActivity {
         setContentView(R.layout.activity_new_reservation);
 
         car_spinner =findViewById(R.id.spinner);
+
+        et_start = findViewById(R.id.et_start);
+        et_ziel = findViewById(R.id.et_ziel);
+        et_strecke = findViewById(R.id.et_strecke);
+
+        btnAddReservation = findViewById(R.id.btnReservation);
+
+        btnAddReservation.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                if(getIntent().hasExtra("public_id") == true) {
+                    eingeloggterUser = getIntent().getExtras().getString("public_id");
+                }
+
+                String json = "{\"fahrzeug_id\": 77,\"public_id\":" + "\"" + eingeloggterUser + "\"" + ",\"start\":" + "\"" + et_start.getText().toString()+ "\"" + ",\"ende\":" + "\"" +et_ziel.getText().toString()+ "\"" + ",\"meter\":" + "\"" + et_strecke.getText().toString() + "\"" + "}";
+                try {
+                    addNewReservation("http://10.0.2.2:5000/reservierung", json);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         try {
-            doGetRequest("http://10.0.2.2:5000/car");
+            getAvailableCars("http://10.0.2.2:5000/car");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void doGetRequest(String url)throws IOException {
+    private void getAvailableCars(String url)throws IOException {
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client_cars = new OkHttpClient();
 
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-        client.newCall(request).enqueue(new Callback() {
+        client_cars.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -75,6 +114,7 @@ public class newReservation extends AppCompatActivity {
 
 
                                         cars.add("ID:" + id.toString() + " " + "Marke: " + marke + " " + "Modell: " + modell );
+                                        cars_id.add(id);
 
                                     } catch (JSONException e) {
                                         // Oops
@@ -91,5 +131,36 @@ public class newReservation extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void addNewReservation(String url, String json) throws IOException{
+
+        OkHttpClient client_reservation = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        client_reservation.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String myResponse = response.body().string();
+
+                    newReservation.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                        }
+                    });
+                }
+            }
+        });
+
     }
 }
