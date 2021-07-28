@@ -75,10 +75,15 @@ public class Fleet extends AppCompatActivity {
                                         Double kilometerstand = oneObject.getDouble("kilometerstand");
                                         Integer ps = oneObject.getInt("ps");
                                         Boolean verfügbar = oneObject.getBoolean("verfügbar");
+                                        String verfügbar2;
+                                        if(verfügbar==true){
+                                            verfügbar2 = "ja";
+                                        }
+                                        else{
+                                            verfügbar2 = "nein";
+                                        }
 
-                                        car_list.add(new ListItem_Fleet(id,marke, modell, kilometerstand.floatValue(),ps,verfügbar));
-                                        Log.d("Fahrtenbuch", car_list.get(i).getModell());
-                                        Log.d("Fahrtenbuch", car_list.get(i).getModell());
+                                        car_list.add(new ListItem_Fleet(id,marke, modell, kilometerstand.floatValue(),ps,verfügbar2));
                                     } catch (JSONException e) {
                                         // Oops
                                     }

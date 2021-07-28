@@ -10,7 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -25,6 +29,8 @@ import okhttp3.Route;
 
 public class Login extends AppCompatActivity {
     private Button loginBtn;
+    private String eingeloggterUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +96,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    //final String myResponse = response.body().string();
+                    eingeloggterUser = response.body().string();
 
                     Login.this.runOnUiThread(new Runnable() {
                         @Override
@@ -124,6 +130,7 @@ public class Login extends AppCompatActivity {
 
     private void switchActivity(){
         Intent switchActivityIntent = new Intent(this, Welcome.class);
+        switchActivityIntent.putExtra("public_id", eingeloggterUser);
         startActivity(switchActivityIntent);
     }
 
