@@ -51,6 +51,8 @@ public class newReservation extends AppCompatActivity {
 
         car_spinner =findViewById(R.id.spinner);
 
+        cars.add(0, "Wähle ein Auto");
+
 
         et_start = findViewById(R.id.et_start);
         et_ziel = findViewById(R.id.et_ziel);
@@ -64,8 +66,7 @@ public class newReservation extends AppCompatActivity {
 
                 if(getIntent().hasExtra("public_id") == true) {
                     eingeloggterUser = getIntent().getExtras().getString("public_id");
-                    car_id = car_spinner.getSelectedItemPosition();
-
+                    car_id = car_spinner.getSelectedItemPosition() -1;
                 }
 
                 String json = "{\"fahrzeug_id\":" + "\"" + cars_id.get(car_id) + "\"" + ",\"public_id\":" + "\"" + eingeloggterUser + "\"" + ",\"start\":" + "\"" + et_start.getText().toString()+ "\"" + ",\"ende\":" + "\"" +et_ziel.getText().toString()+ "\"" + ",\"meter\":" + "\"" + et_strecke.getText().toString() + "\"" + "}";
