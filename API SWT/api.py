@@ -57,22 +57,24 @@ def get_all_reservierungen():
 
 @app.route('/reservierung/<public_id>', methods=['GET'])
 def get_one_reservierung(public_id):
-
-    reservierung = Reservierung.query.filter(public_id==public_id).first()
+    
+    reservierung = Reservierung.query.filter_by(public_id=public_id)
 
     if not reservierung:
         return jsonify({'message' : 'No reservation Found'})
+    output=[]
+
+    for reservierung in reservierung:
+        reservierung_data = {}
+        reservierung_data['public_id'] = reservierung.public_id
+        reservierung_data['fahrzeug_id'] = reservierung.fahrzeug_id
+        reservierung_data['reservierungs_id'] = reservierung.reservierungs_id
+        reservierung_data['start'] = reservierung.start
+        reservierung_data['ende'] = reservierung.ende
+        reservierung_data['meter'] = reservierung.meter
+        output.append(reservierung_data)
     
-    reservierung_data = {}
-    reservierung_data['public_id'] = reservierung.public_id
-    reservierung_data['fahrzeug_id'] = reservierung.fahrzeug_id
-    reservierung_data['reservierungs_id'] = reservierung.reservierungs_id
-    reservierung_data['start'] = reservierung.start
-    reservierung_data['ende'] = reservierung.ende
-    reservierung_data['meter'] = reservierung.meter
-
-    return jsonify({'reservierung' : reservierung_data})
-
+    return jsonify({'reservierungen' : output})
 
 @app.route('/reservierung', methods=['POST'])
 def create_reservierung():
@@ -107,7 +109,7 @@ def get_all_users():
 @app.route('/user/<public_id>', methods=['GET'])
 def get_one_user(public_id):
 
-    user = User.query.filter(public_id==public_id).first()
+    user = User.query.filter_by(public_id=public_id).first()
 
     if not user:
         return jsonify({'message' : 'No user found!'})
@@ -129,7 +131,7 @@ def create_user():
 
     hashed_password = generate_password_hash(data['password'], method='sha256')
 
-    new_user = User(public_id=str(uuid.uuid4()), vorname=data['vorname'], nachname=data['nachname'], password=hashed_password, email=data['email'], admin=True)
+    new_user = User(public_id=str(uuid.uuid4()), vorname=data['vorname'], nachname=data['nachname'], password=hashed_password, email=data['email'], admin=False)
     db.session.add(new_user)
     db.session.commit()
 
@@ -140,7 +142,7 @@ def delete_user(current_user, public_id):
     if not current_user.admin:
         return jsonify({'message' : 'Cannot perform that function!'})
 
-    user = User.query.filter_by(public_id=public_id).first()
+    user = User.query.filter(public_id==public_id).first()
 
     if not user:
         return jsonify({'message' : 'No user found!'})
@@ -165,7 +167,7 @@ def get_all_car():
         car_data['ps'] = car.ps
         car_data['kilometerstand'] = car.kilometerstand
         car_data['reichweite'] = car.reichweite
-        car_data['verfügbar'] = car.verfügbar
+        car_data['verfuegbar'] = car.verfuegbar
         
         output.append(car_data)
     return jsonify({'cars' : output})
@@ -175,11 +177,34 @@ def create_car():
 
     data = request.get_json()
 
-    new_car = Car( marke = data['marke'], model = data['model'], ps = data['ps'], kilometerstand = data['kilometerstand'],reichweite = data['reichweite'], verfügbar = data['verfügbar'])
+    new_car = Car( marke = data['marke'], model = data['model'], ps = data['ps'], kilometerstand = data['kilometerstand'],reichweite = data['reichweite'], verfuegbar = data['verfuegbar'])
     db.session.add(new_car)
     db.session.commit()
 
     return jsonify({'message' : 'New Car created!'})
+
+@app.route('/verfügbarCar', methods=['GET'])
+def get_free_car():
+    
+    car = Car.query.filter_by(verfügbar=True).all()
+
+    
+    output=[]
+
+    for car in car:
+        car_data = {}
+        car_data['id'] = car.id
+        car_data['marke'] = car.marke
+        car_data['model'] = car.model
+        car_data['ps'] = car.ps
+        car_data['kilometerstand'] = car.kilometerstand
+        car_data['reichweite'] = car.reichweite
+        car_data['verfügbar'] = car.verfügbar
+        output.append(car_data)
+    
+    return jsonify({'Free Cars' : output})
+
+
 
 @app.route('/login')
 def login():
