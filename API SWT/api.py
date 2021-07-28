@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, json, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -22,8 +22,8 @@ class Reservierung(db.Model):
     reservierungs_id = db.Column(db.Integer, primary_key=True)
     fahrzeug_id = db.Column(db.Integer)
     public_id = db.Column(db.String(50))
-    start = db.Column(db.Float)
-    ende = db.Column(db.Float)
+    start = db.Column(db.String)
+    ende = db.Column(db.String)
     meter = db.Column(db.Float)
 
 class Car(db.Model):
@@ -54,6 +54,25 @@ def get_all_reservierungen():
 
         output.append(reservierung_data)
     return jsonify({'reservierungen' : output})
+
+@app.route('/reservierung/<public_id>', methods=['GET'])
+def get_one_reservierung(public_id):
+
+    reservierung = Reservierung.query.filter(public_id==public_id).first()
+
+    if not reservierung:
+        return jsonify({'message' : 'No reservation Found'})
+    
+    reservierung_data = {}
+    reservierung_data['public_id'] = reservierung.public_id
+    reservierung_data['fahrzeug_id'] = reservierung.fahrzeug_id
+    reservierung_data['reservierungs_id'] = reservierung.reservierungs_id
+    reservierung_data['start'] = reservierung.start
+    reservierung_data['ende'] = reservierung.ende
+    reservierung_data['meter'] = reservierung.meter
+
+    return jsonify({'reservierung' : reservierung_data})
+
 
 @app.route('/reservierung', methods=['POST'])
 def create_reservierung():
@@ -88,7 +107,7 @@ def get_all_users():
 @app.route('/user/<public_id>', methods=['GET'])
 def get_one_user(public_id):
 
-    user = User.query.filter_by(public_id=public_id).first()
+    user = User.query.filter(public_id==public_id).first()
 
     if not user:
         return jsonify({'message' : 'No user found!'})
