@@ -91,7 +91,6 @@ def get_car_byreservation(reservierungs_id):
 
     return str(reservierung.fahrzeug_id)
 
-
 @app.route('/reservierung/<reservierungs_id>', methods=['DELETE'])
 def delete_reservierung(reservierungs_id):
 
