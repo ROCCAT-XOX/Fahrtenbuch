@@ -67,16 +67,27 @@ public class newReservation extends AppCompatActivity {
 
                 if(getIntent().hasExtra("public_id") == true) {
                     eingeloggterUser = getIntent().getExtras().getString("public_id");
-                    car_id = car_spinner.getSelectedItemPosition() -1;
+
                 }
 
-                String json = "{\"fahrzeug_id\":" + "\"" + cars_id.get(car_id) + "\"" + ",\"public_id\":" + "\"" + eingeloggterUser + "\"" + ",\"start\":" + "\"" + et_start.getText().toString()+ "\"" + ",\"ende\":" + "\"" +et_ziel.getText().toString()+ "\"" + ",\"meter\":" + "\"" + et_strecke.getText().toString() + "\"" + "}";
-                try {
-                    changeCarStatus("http://10.0.2.2:5000/unavailablecar/" + cars_id.get(car_id));
-                    addNewReservation("http://10.0.2.2:5000/reservierung", json);
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+
+
+                if(et_start.getText().toString().matches("") || et_ziel.getText().toString().matches("") || et_strecke.getText().toString().matches("") || car_spinner.getSelectedItem().equals("Wähle ein Auto")){
+                    Toast.makeText(newReservation.this, "Fill out the fields", Toast.LENGTH_SHORT).show();
                 }
+
+                else{
+                    car_id = car_spinner.getSelectedItemPosition() -1;
+                    String json = "{\"fahrzeug_id\":" + "\"" + cars_id.get(car_id) + "\"" + ",\"public_id\":" + "\"" + eingeloggterUser + "\"" + ",\"start\":" + "\"" + et_start.getText().toString()+ "\"" + ",\"ende\":" + "\"" +et_ziel.getText().toString()+ "\"" + ",\"meter\":" + "\"" + et_strecke.getText().toString() + "\"" + "}";
+
+                    try {
+                        addNewReservation("http://10.0.2.2:5000/reservierung", json);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
         });
 
@@ -173,6 +184,11 @@ public class newReservation extends AppCompatActivity {
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 public void run() {
+                                    try {
+                                        changeCarStatus("http://10.0.2.2:5000/unavailablecar/" + cars_id.get(car_id));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                     //Activity wechseln
                                     switchActivity();
                                 }
