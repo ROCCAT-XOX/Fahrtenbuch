@@ -72,6 +72,7 @@ public class newReservation extends AppCompatActivity {
 
                 String json = "{\"fahrzeug_id\":" + "\"" + cars_id.get(car_id) + "\"" + ",\"public_id\":" + "\"" + eingeloggterUser + "\"" + ",\"start\":" + "\"" + et_start.getText().toString()+ "\"" + ",\"ende\":" + "\"" +et_ziel.getText().toString()+ "\"" + ",\"meter\":" + "\"" + et_strecke.getText().toString() + "\"" + "}";
                 try {
+                    changeCarStatus("http://10.0.2.2:5000/unavailablecar/" + cars_id.get(car_id));
                     addNewReservation("http://10.0.2.2:5000/reservierung", json);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -117,7 +118,7 @@ public class newReservation extends AppCompatActivity {
                                 {
                                     try {
                                         JSONObject oneObject = jsonArray.getJSONObject(i);
-                                        Integer id = oneObject.getInt("id");
+                                        Integer id = oneObject.getInt("fahrzeug_id");
                                         String modell = oneObject.getString("model");
                                         String marke = oneObject.getString("marke");
 
@@ -176,6 +177,40 @@ public class newReservation extends AppCompatActivity {
                                     switchActivity();
                                 }
                             }, 1200);
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+
+    private void changeCarStatus(String url) throws IOException{
+        OkHttpClient client_changecarstatus = new OkHttpClient();
+
+        String json = "";
+
+        RequestBody body = RequestBody.create(JSON, json);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .put(body)
+                .build();
+        client_changecarstatus.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+
+
+                    newReservation.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
                         }
                     });
                 }

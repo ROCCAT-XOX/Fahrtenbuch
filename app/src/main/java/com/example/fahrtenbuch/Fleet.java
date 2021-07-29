@@ -71,7 +71,7 @@ public class Fleet extends AppCompatActivity {
                                         JSONObject oneObject = jsonArray.getJSONObject(i);
                                         String marke = oneObject.getString("marke");
                                         String modell = oneObject.getString("model");
-                                        Integer id = oneObject.getInt("id");
+                                        Integer id = oneObject.getInt("fahrzeug_id");
                                         Double kilometerstand = oneObject.getDouble("kilometerstand");
                                         Integer ps = oneObject.getInt("ps");
                                         Boolean verfügbar = oneObject.getBoolean("verfügbar");
