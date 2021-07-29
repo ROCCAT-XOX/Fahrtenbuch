@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,8 +29,12 @@ import okhttp3.Response;
 
 public class NewDrive extends AppCompatActivity {
 
+    private String eingeloggterUser;
+
     private Spinner car_drive_spinner;
     private Spinner spinner_reservation;
+
+    private Button button_submit_drive;
 
     private EditText et_drive_start;
     private EditText et_drive_ziel;
@@ -46,12 +52,13 @@ public class NewDrive extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_drive);
 
+        button_submit_drive = findViewById(R.id.button_submit_drive);
+
         et_drive_start = findViewById(R.id.et_drive_start);
         et_drive_ziel = findViewById(R.id.et_drive_ziel);
         et_drive_strecke = findViewById(R.id.et_drive_strecke);
 
 
-        String eingeloggterUser ="";
         Intent switchActivityIntent = new Intent(this, myReservation.class);
         if(getIntent().hasExtra("public_id") == true) {
             eingeloggterUser = getIntent().getExtras().getString("public_id");
@@ -79,6 +86,7 @@ public class NewDrive extends AppCompatActivity {
                     et_drive_start.setText("");
                     et_drive_ziel.setText("");
                     et_drive_strecke.setText("");
+                    car_drive_spinner.setSelection(0);
                 }
             }
 
@@ -97,6 +105,24 @@ public class NewDrive extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        button_submit_drive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(et_drive_start.getText().toString() != "" && et_drive_ziel.getText().toString() != "" && et_drive_strecke.getText().toString() != "" && car_drive_spinner.getSelectedItemPosition() > 0){
+                    switchActivity();
+                }
+                else{
+                    Toast.makeText(NewDrive.this, "Fill out the fields!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void switchActivity(){
+        Intent switchActivityIntent = new Intent(this, correction.class);
+        switchActivityIntent.putExtra("public_id", eingeloggterUser);
+        startActivity(switchActivityIntent);
     }
 
     private void getAvailableCars(String url)throws IOException {
@@ -251,7 +277,7 @@ public class NewDrive extends AppCompatActivity {
                                 {
 
                                     if(cars_id.get(i) == car_id){
-                                        car_drive_spinner.setSelection(car_id);
+                                        car_drive_spinner.setSelection(i+1);
                                     }
                                 }
 
@@ -264,6 +290,5 @@ public class NewDrive extends AppCompatActivity {
                 }
             }
         });
-
     }
 }
