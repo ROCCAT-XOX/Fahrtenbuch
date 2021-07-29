@@ -71,7 +71,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <EditText
-        android:id="@+id/et__drive_start"
+        android:id="@+id/et_drive_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
@@ -92,13 +92,13 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView10"
-        app:layout_constraintTop_toBottomOf="@+id/et__drive_start" />
+        app:layout_constraintTop_toBottomOf="@+id/et_drive_start" />
 
     <Spinner
         android:id="@+id/car_drive_spinner"
         android:layout_width="329dp"
         android:layout_height="34dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="156dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_drive_ziel" />
@@ -107,7 +107,7 @@
         android:id="@+id/button"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="56dp"
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
