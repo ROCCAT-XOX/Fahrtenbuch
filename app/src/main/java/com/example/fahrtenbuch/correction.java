@@ -69,6 +69,10 @@ public class correction extends AppCompatActivity {
                     correction.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            SharedPreferences settingsP = getSharedPreferences("Car", 0);
+                            SharedPreferences.Editor editor = settingsP.edit();
+                            editor.putString("kilometerstand", kilometerstand);
+                            editor.apply();
                             tv_kilometerstand.setText(kilometerstand);
                         }
                     });
@@ -127,7 +131,7 @@ public class correction extends AppCompatActivity {
     }
 
     private void switchActivity(){
-        Intent switchActivityIntent = new Intent(this, Welcome.class);
+        Intent switchActivityIntent = new Intent(this, Geotracking.class);
         startActivity(switchActivityIntent);
     }
 

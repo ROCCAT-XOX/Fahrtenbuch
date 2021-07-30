@@ -312,6 +312,10 @@ public class NewDrive extends AppCompatActivity {
     private void switchActivity(){
         Intent switchActivityIntent = new Intent(this, correction.class);
         switchActivityIntent.putExtra("public_id", eingeloggterUser);
+        SharedPreferences settingsP = getSharedPreferences("Car", 0);
+        SharedPreferences.Editor editor = settingsP.edit();
+        editor.putString("strecke", et_drive_strecke.getText().toString());
+        editor.apply();
         startActivity(switchActivityIntent);
     }
 
