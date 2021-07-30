@@ -29,6 +29,7 @@ import okhttp3.Route;
 
 public class Login extends AppCompatActivity {
     private Button loginBtn;
+    private Boolean admin;
     private String eingeloggterUser;
 
     @Override
@@ -96,13 +97,24 @@ public class Login extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    eingeloggterUser = response.body().string();
+                    //eingeloggterUser = response.body().string();
+                    String myResponse = response.body().string();
 
                     Login.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             //Toast message für erfolgreichen Login
                             Toast.makeText(Login.this, "Login successfull!", Toast.LENGTH_SHORT).show();
+                            try {
+                                JSONObject jObject = new JSONObject(myResponse);
+                                eingeloggterUser = jObject.getString("public_id");
+                                admin = jObject.getBoolean("admin");
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                             //Kurz warten mit dem switchen der Activity, um Toast Message vollständig zu zeigen
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
@@ -130,8 +142,16 @@ public class Login extends AppCompatActivity {
 
     private void switchActivity(){
         Intent switchActivityIntent = new Intent(this, Welcome.class);
+        Intent switchActivityIntent2 = new Intent(this, WelcomeAdmin.class);
         switchActivityIntent.putExtra("public_id", eingeloggterUser);
-        startActivity(switchActivityIntent);
+
+        if(admin==true){
+            startActivity(switchActivityIntent2);
+        }
+        else{
+            startActivity(switchActivityIntent);
+        }
+
     }
 
 }

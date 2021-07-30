@@ -26,7 +26,6 @@ public class ListItem_MyReservations {
     public String getZiel() {
         return ziel;
     }
-
     public Integer getCar_id() {
         return car_id;
     }

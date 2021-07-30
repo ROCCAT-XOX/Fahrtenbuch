@@ -152,6 +152,7 @@ public class Geotracking extends AppCompatActivity {
                                 }
                                 result += distances.get(i);
                             }
+                            tv_info.setText("Geotracking beendet!");
                             tv_ermittelte_entfernung.setText(String.valueOf(result));
                         }
                     });
@@ -171,6 +172,7 @@ public class Geotracking extends AppCompatActivity {
                     Float newkilometerstand = Float.parseFloat(strecke) + Float.parseFloat(alter_kilometerstand);
                     String json = "{\"kilometerstand\":" + newkilometerstand + "}";
                     korriegiereKilometerstand("http://10.0.2.2:5000/carKilometerstand/" + car_id, json);
+                    makeCarAvailable("http://10.0.2.2:5000/availablecar/" + car_id);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -184,6 +186,7 @@ public class Geotracking extends AppCompatActivity {
                     Float newkilometerstand = (result.floatValue() + Float.parseFloat(alter_kilometerstand));
                     String json = "{\"kilometerstand\":" + newkilometerstand + "}";
                     korriegiereKilometerstand("http://10.0.2.2:5000/carKilometerstand/" + car_id, json);
+                    makeCarAvailable("http://10.0.2.2:5000/availablecar/" + car_id);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -227,6 +230,39 @@ public class Geotracking extends AppCompatActivity {
     private void switchActivity(){
         Intent switchActivityIntent = new Intent(this, Welcome.class);
         startActivity(switchActivityIntent);
+    }
+
+    private void makeCarAvailable(String url) throws IOException{
+        OkHttpClient client_changecarstatus = new OkHttpClient();
+
+        String json = "";
+
+        RequestBody body = RequestBody.create(JSON, json);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .put(body)
+                .build();
+        client_changecarstatus.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+
+
+                    Geotracking.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void getKilometerstand(String url) throws IOException{

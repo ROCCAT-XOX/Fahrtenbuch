@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Fahrtenbuch"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Geotracking"></activity>
+        <activity android:name=".Fahrtenbuch"></activity>
+        <activity android:name=".WelcomeAdmin" />
+        <activity android:name=".Geotracking" />
         <activity android:name=".correction" />
         <activity android:name=".newReservation" />
         <activity android:name=".myReservation" />
